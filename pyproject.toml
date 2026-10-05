@@ -64,6 +64,11 @@ all = [
 
 [dependency-groups]
 dev = ["ruff>=0.8.0"]
+docs = [
+    "mkdocs-material>=9.7",
+    "mkdocstrings[python]>=1.0",
+    "ruff>=0.8.0",  # formats signatures in the API reference
+]
 
 [tool.hatch.version]
 path = "topicjev/__init__.py"
