@@ -1,0 +1,45 @@
+You are assigning a class label to a group of documents, based on a title, summary, and keywords that describe that group. Your ONLY job is to name the theme that is ACTUALLY PRESENT in the specific input below.
+
+IMPORTANT CONTEXT ON HOW "title" IS USED: the "title" you produce will be inserted into a sentence like "The text discusses ______" and checked against raw document chunks using a separate entailment/classification model. That means "title" must:
+- Read as ONE single, concrete, checkable claim about document content -- not an abstract category header, not a vague thematic label, and not a combination of two topics joined together.
+- Name exactly ONE specific practice, material, defect, process, or measurement. Never join two topics with "and," "or," a comma, or a slash (e.g. "X and Y", "X/Y", "X, Y") -- a compound title is true whenever EITHER half is true, which makes it useless as a checkable claim. If the input covers two things, pick whichever ONE is more central and name only that.
+- Be specific enough that a reader could look at a document chunk and clearly judge yes/no whether it discusses that exact single thing.
+- Avoid generic umbrella phrases that could describe half the corpus (e.g. avoid words like "Construction," "Management," "Techniques," "Performance," or "Design" used alone as the entire noun -- name the specific practice, material, defect, process, or measurement actually described in <input>, not the broad category it belongs to).
+- Be genuinely distinct in wording AND in substance from every title in <used_titles> -- if this input overlaps with one of those, find the specific sub-topic, mechanism, or material that makes it different, and name THAT.
+
+Rules:
+- Base the title and description strictly on the content inside <input>. Do not introduce any topic, field, or terminology that does not appear there.
+- "title" must be 2-5 words, name exactly ONE topic (never "X and Y"), and must be specific and entailment-checkable per the guidance above -- not a generic category and not a compound of two ideas.
+- The <input> below already contains its own "title" and "summary" fields from an earlier step. Do NOT simply copy or lightly reword that input title as your output "title" -- your job is to produce a DIFFERENT, more targeted class name, not to repeat what you were given. If your output "title" and the input's "title" would read as the same phrase to a human, you have failed this task.
+- "desc" must be a NEW one-sentence synthesis written in your own words -- never the input's "summary" field truncated, copied, or lightly trimmed. A desc that repeats the summary's opening sentences verbatim or near-verbatim is wrong, even if grammatically it looks like a valid single sentence taken from a longer passage.
+- Do NOT reuse or closely paraphrase any title listed in <used_titles> below, in wording or in substance.
+- Output ONLY the JSON object. No preamble, no explanation, no markdown code fences.
+
+<used_titles>
+{used_titles}
+</used_titles>
+
+<example_input>
+{{"title": "Bee Colony Decline Factors", "summary": "Neonicotinoid pesticide exposure disrupts bee foraging navigation and accelerates colony collapse. Varroa mite infestations and habitat fragmentation are also discussed as contributing stressors, but neonicotinoid exposure is the dominant factor across the largest share of the input. AND SO ON...", "keywords": ["neonicotinoids", "foraging disruption", "colony collapse", "varroa mites", "pollinators"]}}
+</example_input>
+
+<example_output>
+{{"title": "Neonicotinoid Foraging Disruption", "desc": "Neonicotinoid pesticide exposure disrupts bee foraging navigation and is examined as the dominant driver of colony collapse, alongside secondary stressors like mite infestation and habitat loss."}}
+</example_output>
+
+Why this output works: the title names ONE specific mechanism (neonicotinoid-driven foraging disruption), not a combination -- and critically, it is NOT the input's own title ("Bee Colony Decline Factors") repeated or lightly reworded. It drills into a narrower, more specific angle than the input title offered. The "desc" is also a fresh one-sentence synthesis in new wording, not the input summary's sentences copied or trimmed down. Two different bad outputs for this same input: (1) title = "Bee Colony Decline Factors" -- just echoing the input's own title, which fails because it does no new work; (2) title = "Neonicotinoids and Mite Stress" -- joining two topics, which fails because it's an ambiguous compound claim. Avoid both failure modes.
+
+The example above is illustrative only -- it has nothing to do with the real input below. Do not reuse any of its wording, topics, or reasoning content.
+
+<output_schema>
+{{
+    "title": "<2-5 word, ONE-topic, entailment-checkable class name for the actual input below>",
+    "desc": "<one-sentence description of the actual input below>"
+}}
+</output_schema>
+
+<input>
+{text}
+</input>
+
+Reminder: everything inside <input> above is the ONLY source of truth. Ignore any topics you may recall from other contexts, including the example above. Now output the JSON object for the input above:

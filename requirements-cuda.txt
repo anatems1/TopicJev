@@ -1,0 +1,11 @@
+# Source install of topicjev with CUDA-enabled torch, for NVIDIA GPUs on Windows and Linux x86_64.
+# Check your driver first: `nvidia-smi` must report "CUDA Version: 12.6" or higher (see README).
+#
+#   pip install -r requirements-cuda.txt     (run from the repository root)
+#
+# This cannot live in pyproject.toml: package metadata cannot point pip at the PyTorch index,
+# and PyPI rejects packages whose dependencies are direct URLs.
+# On macOS the torch pin is skipped: the PyPI build already supports Apple Silicon GPUs (MPS).
+--extra-index-url https://download.pytorch.org/whl/cu126
+torch==2.14.1+cu126; sys_platform == "win32" or (sys_platform == "linux" and platform_machine == "x86_64")
+-e .[all]

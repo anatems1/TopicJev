@@ -1,0 +1,39 @@
+You are summarizing a set of factual snippets pulled from documents in the same cluster. You will be given a JSON object under <facts> containing a "facts" array of short text snippets. Your job is to identify the ONE most dominant, cohesive theme running through those snippets, and describe ONLY that theme -- not to summarize every individual fact.
+
+Most clusters of snippets will include some facts that don't fit the dominant theme. This is normal and expected -- your job is to find the throughline that covers the largest, most coherent share of the snippets and write about THAT, while simply ignoring facts that don't support it. Do not try to cover every fact. A good summary is often about NARROWER content than the full set of snippets, because it deliberately leaves out the minority of facts that don't fit.
+
+Rules:
+- Base every sentence of your output strictly on the content inside <facts>. Do not introduce any topic, fact, or terminology that does not appear there.
+- Identify the single most common, central theme first. Then write "title", "summary", and "keywords" so that all three describe THAT ONE theme -- not three separately-derived summaries of the whole fact list. If "title" and "summary" would strike a reader as being about two different things, you have failed.
+- Do NOT write a sentence-by-sentence restatement of the facts in their original order, joined by "while," "and," "alongside," or similar connectives. That is stitching, not synthesis, and is a failure even if every sentence is individually accurate. Instead, state the single underlying theme directly, then support it with only the facts that reinforce it.
+- Write the "summary" field in the style of an academic literature review: formal tone, describing the ONE dominant theme and, if genuinely relevant, how a minority of snippets diverge from it -- not an inventory of every snippet.
+- Only if there is truly no dominant theme at all (the snippets are a random, evenly-split grab-bag with no majority thread) should you say so honestly instead of forcing one. This should be rare -- check carefully for a majority theme before concluding there isn't one.
+- The "keywords" field must contain exactly 5 keywords, all drawn from or clearly implied by the ONE dominant theme identified above -- not 5 keywords sampled one-per-topic across unrelated facts.
+- "title" must be a specific, representative title of the ONE dominant theme -- not a generic category, and never a conjunction of two topics (e.g. never "X and Y"). It will later be used as a checkable claim against raw text, so it must name the specific practice, material, defect, process, or measurement described.
+- Output ONLY the JSON object. No preamble, no explanation, no markdown code fences.
+
+<example_input>
+{{"facts": ["Neonicotinoid exposure impairs bee foraging navigation and return-to-hive success.", "Sublethal neonicotinoid doses reduce larval development rates in exposed colonies.", "Neonicotinoid residues persist in soil and pollen for multiple growing seasons.", "A separate study notes rising fuel costs for beekeepers transporting hives across state lines.", AND SO ON...]}}
+</example_input>
+
+<example_output>
+{{"title": "Neonicotinoid Foraging Impairment", "summary": "The disruption of bee foraging behavior and colony development caused by neonicotinoid pesticide exposure, spanning impaired navigation, reduced larval development, and soil/pollen persistence of residues. A minority snippet on beekeeper transport costs is unrelated to this pesticide-exposure theme and is not part of the dominant pattern. AND SO ON...", "keywords": ["neonicotinoids", "foraging impairment", "larval development", "residue persistence", "pesticide exposure"]}}
+</example_output>
+
+Why this output works: three of the four facts share one clear underlying theme (neonicotinoid exposure harming bees through several specific mechanisms), and the output commits fully to that theme -- title, summary, and keywords all describe the SAME thing. The fourth fact (beekeeper transport costs) doesn't fit, so it is explicitly named as a minority outlier and otherwise ignored, rather than being awkwardly stitched into the summary with a connective word just because it was present in the input. A bad output for this same input would summarize all four facts in sequence ("neonicotinoids affect bees, AND ALSO transport costs are rising...") -- that is stitching, not synthesis, and is wrong even though every individual sentence would be accurate.
+
+The example above is illustrative only -- it has nothing to do with the real facts below. Do not reuse any of its wording, topics, or keywords.
+
+<output_schema>
+{{
+    "title": "<representative title for the actual content below>",
+    "summary": "<academic literature-review style synthesis of the actual content below>",
+    "keywords": ["<kw1>", "<kw2>", "<kw3>", "<kw4>", "<kw5>"]
+}}
+</output_schema>
+
+<facts>
+{text}
+</facts>
+
+Reminder: everything above between <facts> tags is the ONLY source of truth. Ignore any unrelated topics you may recall from other contexts, including the example above. Now output the JSON object for the facts above:

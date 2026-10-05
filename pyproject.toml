@@ -1,0 +1,72 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "topicjev"
+dynamic = ["version"]
+description = "An Efficient Low-Resource Bootstrap for Topic Model Refinement in Zero-Shot Setting"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE.md"]
+requires-python = ">=3.12"
+authors = [
+    { name = "Mason Smetana" },
+    { name = "Igor Sukharev" },
+    { name = "Lev Khazanovich" },
+]
+keywords = [
+    "topic modeling",
+    "zero-shot classification",
+    "entailment",
+    "prompt compression",
+    "jev",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Typing :: Typed",
+]
+dependencies = [
+    "torch>=2.1.0",
+    "transformers>=5.5.0",
+    "sentence-transformers>=6.0.0",
+    "faiss-cpu>=1.7.0",
+    "numpy>=1.24.0",
+    "python-dotenv>=1.0.0",
+    "tqdm>=4.65.0",
+    "typesafe-sdk>=0.7.2",
+    "laya>=0.3.11",
+]
+
+[project.optional-dependencies]
+lingua = ["llmlingua>=0.2.2"]
+examples = [
+    "bertopic>=0.17.0",
+    "pandas>=2.0.0",
+    "scikit-learn>=1.2.0",
+    "datasets>=2.14.0",
+]
+all = [
+    "llmlingua>=0.2.2",
+    "typesafe-sdk>=0.7.2",
+    "laya>=0.3.11",
+    "bertopic>=0.17.0",
+    "pandas>=2.0.0",
+    "scikit-learn>=1.2.0",
+    "datasets>=2.14.0",
+]
+
+[dependency-groups]
+dev = ["ruff>=0.8.0"]
+
+[tool.hatch.version]
+path = "topicjev/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["topicjev"]
