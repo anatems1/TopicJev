@@ -1,0 +1,42 @@
+# Publishes the pre-built documentation in docs/html to GitHub Pages.
+# The site is built locally (see build-docs.md) and committed; this workflow only uploads it.
+name: Deploy docs
+
+on:
+  # Manual only: Actions > Deploy docs > Run workflow.
+  # To deploy on every push that changes the built site, add:
+  #   push:
+  #     branches: [master]
+  #     paths: ["docs/html/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time; let a running one finish
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check that the built site is committed
+        run: test -f docs/html/index.html
+
+      - uses: actions/configure-pages@v6
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: docs/html
+
+      - id: deployment
+        uses: actions/deploy-pages@v5
